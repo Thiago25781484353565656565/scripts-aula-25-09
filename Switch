@@ -1,0 +1,58 @@
+enable
+configure terminal
+hostname SW-01
+banner motd "ACESSO APENAS PARA PESSOAS AUTORIZADAS"
+enable secret SenhadaEnable
+ip domain-name grupo4.local
+crypto key generate rsa general-keys modulus 1024
+username Relampago privilege 15 secret marquinhos
+username Thiago000 privilege 15 secret thiagosilva
+username Rakel1711 privilege 15 secret 17117504
+username Picolo666 privilege 15 secret goku1234
+line console 0
+password SenhadaConsole
+login
+exit
+service password-encryption
+line vty 0 15
+password SenhadaVTY
+transport input ssh
+exec-timeout 9
+login local
+exit
+vlan 10
+name rede1
+vlan 20
+name rede2
+vlan 30
+name GERENCIAMENTO
+interface fastEthernet 0/1
+switchport mode access 
+switchport access vlan 10
+description PC1
+interface fastEthernet 0/2
+switchport mode access
+switchport access vlan 10
+description PC2
+interface fastEthernet 0/3
+switchport mode access
+switchport access vlan 20
+description PC3
+interface fastEthernet 0/4
+switchport mode access
+switchport access vlan 20
+interface fastEthernet 0/24
+switchport mode access
+switchport access vlan 30
+description SRV
+interface gigabitEthernet 0/1
+switchport mode trunk 
+switchport trunk native vlan 99
+switchport trunk allowed vlan 10,20,30,99
+description TRUNK ROUTER
+interface vlan 30
+ip address 192.168.5.46 255.255.255.240
+description INTERFACE DE GERENCIAMENTO
+exit
+ip default-gateway 192.168.5.1
+do wr
